@@ -2,7 +2,7 @@
 
 An AI-powered search engine with a generative UI.
 
-![capture](/public/screenshot-2025-01-15.png)
+![capture](/public/screenshot-2025-01-31.png)
 
 ## 🗂️ Overview
 
@@ -24,6 +24,7 @@ An AI-powered search engine with a generative UI.
 - Natural language question understanding
 - Multiple search providers support (Tavily, SearXNG, Exa)
 - Model selection from UI (switch between available AI models)
+  - Reasoning models with visible thought process
 
 ### Chat & History
 
@@ -33,13 +34,20 @@ An AI-powered search engine with a generative UI.
 
 ### AI Providers
 
+The following AI providers are supported:
+
 - OpenAI (Default)
 - Google Generative AI
 - Azure OpenAI
 - Anthropic
 - Ollama
 - Groq
+- DeepSeek
+- Fireworks
+- xAI (Grok)
 - OpenAI Compatible
+
+Models are configured in `public/config/models.json`. Each model requires its corresponding API key to be set in the environment variables. See [Configuration Guide](docs/CONFIGURATION.md) for details.
 
 ### Search Capabilities
 
@@ -67,7 +75,7 @@ An AI-powered search engine with a generative UI.
 
 ### AI & Search
 
-- [OpenAI](https://openai.com/) - Default AI provider (Optional: Google AI, Anthropic, Groq, Ollama, Azure OpenAI)
+- [OpenAI](https://openai.com/) - Default AI provider (Optional: Google AI, Anthropic, Groq, Ollama, Azure OpenAI, DeepSeek, Fireworks)
 - [Tavily AI](https://tavily.com/) - Default search provider
 - Alternative providers:
   - [SearXNG](https://docs.searxng.org/) - Self-hosted search
@@ -136,11 +144,34 @@ Visit http://localhost:3000 in your browser.
 
 ## 🌐 Deploy
 
-Host your own live version of Morphic with Vercel or Cloudflare Pages.
+Host your own live version of Morphic with Vercel, Cloudflare Pages, or Docker.
 
 ### Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmiurla%2Fmorphic&env=OPENAI_API_KEY,TAVILY_API_KEY,UPSTASH_REDIS_REST_URL,UPSTASH_REDIS_REST_TOKEN)
+
+### Docker Prebuilt Image
+
+Prebuilt Docker images are available on GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/miurla/morphic:latest
+```
+
+You can use it with docker-compose:
+
+```yaml
+services:
+  morphic:
+    image: ghcr.io/miurla/morphic:latest
+    env_file: .env.local
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./models.json:/app/public/config/models.json # Optional: Override default model configuration
+```
+
+The default model configuration is located at `public/config/models.json`. For Docker deployment, you can create `models.json` alongside `.env.local` to override the default configuration.
 
 ## 🔎 Search Engine
 
@@ -166,20 +197,37 @@ This will allow you to use Morphic as your default search engine in the browser.
 ### List of models applicable to all
 
 - OpenAI
+  - gpt-4.1
+  - gpt-4.1-mini
+  - gpt-4.1-nano
+  - o3-mini
   - gpt-4o
   - gpt-4o-mini
   - gpt-4-turbo
   - gpt-3.5-turbo
 - Google
-  - Gemini 1.5 Pro (Unstable)
-  - Gemini 2.0 Flash (Experimental)
+  - Gemini 2.5 Pro (Experimental)
+  - Gemini 2.0 Flash Thinking (Experimental)
+  - Gemini 2.0 Flash
 - Anthropic
   - Claude 3.5 Sonnet
+  - Claude 3.5 Hike
 - Ollama
   - qwen2.5
+  - deepseek-r1
 - Groq
-  - llama3-groq-8b-8192-tool-use-preview
-  - llama3-groq-70b-8192-tool-use-preview
+  - deepseek-r1-distill-llama-70b
+  - Llama 4 Maverick 17B
+- Fireworks
+  - DeepSeek R1
+  - Llama 4 Maverick
+- DeepSeek
+  - DeepSeek V3
+  - DeepSeek R1
+- xAI
+  - grok-2
+  - grok-2-vision
+  - grok-3-beta
 
 ## ⚡ AI SDK Implementation
 

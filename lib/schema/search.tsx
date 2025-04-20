@@ -3,11 +3,13 @@ import { z } from 'zod'
 
 export const searchSchema = z.object({
   query: z.string().describe('The query to search for'),
-  max_results: z.coerce
+  max_results: z
     .number()
-    .describe('The maximum number of results to return'),
+    .optional()
+    .describe('The maximum number of results to return. default is 20'),
   search_depth: z
     .string()
+    .optional()
     .describe(
       'The depth of the search. Allowed values are "basic" or "advanced"'
     ),
